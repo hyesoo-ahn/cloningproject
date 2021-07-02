@@ -41,13 +41,12 @@ function MyTabBar({state, descriptors, navigation, position}) {
   return (
     <View
       style={{
+        backgroundColor: '#fff',
         flexDirection: 'row',
-        width: screenWidth - 10,
-        marginHorizontal: 5,
+        width: screenWidth,
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        marginHorizontal: 5,
       }}>
       {state.routes.map((item, index) => {
         const isFocused = state.index === index;
@@ -88,8 +87,8 @@ function MyTabBar({state, descriptors, navigation, position}) {
             <Text
               style={
                 isFocused
-                  ? {color: '#5f0e80', fontWeight: 'bold', fontSize: 14}
-                  : {color: 'gray', fontSize: 14}
+                  ? {color: '#5f0e80', fontWeight: 'bold', fontSize: 15}
+                  : {color: 'gray', fontSize: 15}
               }
               isFocused={isFocused}>
               {label}

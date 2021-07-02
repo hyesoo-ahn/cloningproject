@@ -56,7 +56,9 @@ const Tab1 = ({navigation}) => {
   };
 
   return (
-    <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={{flex: 1, backgroundColor: '#fff'}}>
       <View>
         <FlatList
           automaticallyAdjustContentInsets={false}
@@ -91,24 +93,24 @@ const Tab1 = ({navigation}) => {
           </Text>
         </View>
       </View>
-
-      <View style={{paddingHorizontal: 25}}>
-        <View
-          style={{
-            marginTop: 35,
-            marginBottom: 15,
-          }}>
-          <Text style={{fontSize: 17, fontWeight: '500'}}>이 상품 어때요?</Text>
-        </View>
-      </View>
-      <ProductList navigation={navigation} />
+      <ProductList
+        navigation={navigation}
+        data={ITEM1}
+        title={'이 상품 어때요?'}
+      />
+      <ProductList
+        navigation={navigation}
+        data={ITEM2}
+        title={'놓치면 후회할 가격'}
+        style={{backgroundColor: '#f7f7f7'}}
+      />
     </ScrollView>
   );
 };
 
 export default Tab1;
 
-const ITEM = [
+const ITEM1 = [
   {
     id: 1,
     url: 'https://images.unsplash.com/photo-1589661329742-713c46926e34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=934&q=80',
@@ -146,81 +148,145 @@ const ITEM = [
   },
 ];
 
-const ProductList = ({navigation}) => {
+const ITEM2 = [
+  {
+    id: 1,
+    url: 'https://images.unsplash.com/photo-1555126634-323283e090fa?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
+    price: '2800',
+    category: '픽어베이글',
+    title: '베이글 8종',
+  },
+  {
+    id: 1,
+    url: 'https://images.unsplash.com/photo-1590975417628-4524f658b5a5?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80',
+    price: '2500',
+    category: '포비베이글',
+    title: '시그니처 베이글 6종',
+  },
+  {
+    id: 1,
+    url: 'https://images.unsplash.com/photo-1560781290-7dc94c0f8f4f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=975&q=80',
+    price: '9000',
+    category: '포비베이글',
+    title: '크림치즈 8종',
+  },
+  {
+    id: 1,
+    url: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=931&q=80',
+    price: '2300',
+    category: '오베이글',
+    title: '쌀로 만든 담백한 베이글 5종',
+  },
+  {
+    id: 1,
+    url: 'https://images.unsplash.com/photo-1589661329742-713c46926e34?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=934&q=80',
+    price: '4500',
+    category: '그래밀',
+    title: '통밀식사빵 2종',
+  },
+];
+
+const ProductList = ({navigation, data, style, title}) => {
   return (
-    <ScrollView
-      style={{flexDirection: 'row', marginRight: 5}}
-      horizontal={true}
-      showsHorizontalScrollIndicator={false}>
-      {ITEM.map((item, index) => {
-        return (
-          <TouchableOpacity
-            key={index}
-            onPress={() => {
-              navigation.navigate('detail');
-            }}>
-            <Image
-              source={{
-                url: item.url,
-              }}
-              style={
-                index == 0
-                  ? {width: 130, height: 180, marginLeft: 25, marginBottom: 10}
-                  : index == ITEM.length - 1
-                  ? {
-                      width: 130,
-                      height: 180,
-                      marginRight: 25,
-                      marginLeft: 10,
-                      marginBottom: 10,
-                    }
-                  : {width: 130, height: 180, marginLeft: 10, marginBottom: 10}
-              }
-            />
-            <View
-              style={
-                index == 0
-                  ? {
-                      marginLeft: 25,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      width: 130,
-                    }
-                  : {
-                      marginLeft: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      width: 130,
-                    }
-              }>
-              <Text style={{fontSize: 13, fontWeight: '300', color: '#131313'}}>
-                [{item.category}] {item.title}
-              </Text>
-            </View>
-            <View
-              style={
-                index == 0
-                  ? {
-                      marginLeft: 25,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginTop: 4,
-                      marginBottom: 10,
-                    }
-                  : {
-                      marginLeft: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginTop: 4,
-                      marginBottom: 10,
-                    }
-              }>
-              <Text style={{fontWeight: 'bold'}}>{currency(item.price)}원</Text>
-            </View>
-          </TouchableOpacity>
-        );
-      })}
-    </ScrollView>
+    <View style={{...style, paddingBottom: 20}}>
+      <View
+        style={{
+          marginTop: 25,
+          marginBottom: 15,
+          marginLeft: 25,
+        }}>
+        <Text style={{fontSize: 17, fontWeight: '500'}}>{title}</Text>
+      </View>
+      <ScrollView
+        style={{flexDirection: 'row', marginRight: 5}}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}>
+        {data.map((item, index) => {
+          return (
+            <TouchableOpacity
+              activeOpacity={0.9}
+              key={index}
+              onPress={() => {
+                navigation.navigate('detail', {
+                  productName: `[${item.category}] ${item.title}`,
+                });
+              }}>
+              <Image
+                source={{
+                  url: item.url,
+                }}
+                style={
+                  index == 0
+                    ? {
+                        width: 130,
+                        height: 180,
+                        marginLeft: 25,
+                        marginBottom: 10,
+                      }
+                    : index == data.length - 1
+                    ? {
+                        width: 130,
+                        height: 180,
+                        marginRight: 25,
+                        marginLeft: 10,
+                        marginBottom: 10,
+                      }
+                    : {
+                        width: 130,
+                        height: 180,
+                        marginLeft: 10,
+                        marginBottom: 10,
+                      }
+                }
+              />
+              <View
+                style={
+                  index == 0
+                    ? {
+                        marginLeft: 25,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: 130,
+                      }
+                    : {
+                        marginLeft: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        width: 130,
+                      }
+                }>
+                <Text
+                  style={{fontSize: 13, fontWeight: '300', color: '#131313'}}>
+                  [{item.category}] {item.title}
+                </Text>
+              </View>
+              <View
+                style={
+                  index == 0
+                    ? {
+                        marginLeft: 25,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 4,
+                        marginBottom: 10,
+                      }
+                    : {
+                        marginLeft: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 4,
+                        marginBottom: 10,
+                      }
+                }>
+                <Text style={{fontWeight: 'bold'}}>
+                  {currency(item.price)}원
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </View>
   );
 };
