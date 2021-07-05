@@ -1,5 +1,4 @@
-import * as React from 'react';
-import 'react-native-gesture-handler';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   Text,
   View,
@@ -9,6 +8,7 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -28,7 +28,12 @@ import Tab2 from './components/homeScreenTab/Tab2.js';
 import Tab3 from './components/homeScreenTab/Tab3.js';
 import Tab4 from './components/homeScreenTab/Tab4.js';
 import Tab5 from './components/homeScreenTab/Tab5.js';
-import Animated from 'react-native-reanimated';
+import {DetailHeader} from './common/Header';
+import {DetailContext} from './common/Context';
+import DetailImage from './components/detailScreen/DetailImage';
+import DetailInfo from './components/detailScreen/DetailInfo';
+import Review from './components/detailScreen/Review';
+import ProductFaq from './components/detailScreen/ProductFaq';
 
 const TopTab = createMaterialTopTabNavigator();
 const Tab = createBottomTabNavigator();
@@ -74,7 +79,7 @@ function MyTabBar({state, descriptors, navigation, position}) {
                     width: screenWidth / 5,
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderBottomWidth: 1.7,
+                    borderBottomWidth: 1.9,
                     borderBottomColor: '#4a0a66',
                     height: '100%',
                   }
@@ -101,6 +106,12 @@ function MyTabBar({state, descriptors, navigation, position}) {
 }
 
 const HomeNavi = () => {
+  const context = useContext(DetailContext);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    context.handleStateChange('route', 'HomeNavi');
+  }, [isFocused]);
+
   return (
     <TopTab.Navigator tabBar={props => <MyTabBar {...props} />}>
       <TopTab.Screen name="컬리추천" component={Tab1} />
@@ -109,6 +120,26 @@ const HomeNavi = () => {
       <TopTab.Screen name="알뜰쇼핑" component={Tab4} />
       <TopTab.Screen name="특가/혜택" component={Tab5} />
     </TopTab.Navigator>
+  );
+};
+
+const DetailNavi = ({navigation}) => {
+  const context = useContext(DetailContext);
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    context.handleStateChange('route', 'DetailNavi');
+  }, [isFocused]);
+  return (
+    <>
+      <DetailHeader navigation={navigation} />
+      <TopTab.Navigator tabBar={props => <MyTabBar {...props} />}>
+        <TopTab.Screen name="상품설명" component={DetailScreen} />
+        <TopTab.Screen name="상품이미지" component={DetailImage} />
+        <TopTab.Screen name="상세정보" component={DetailInfo} />
+        <TopTab.Screen name="후기" component={Review} />
+        <TopTab.Screen name="상품문의" component={ProductFaq} />
+      </TopTab.Navigator>
+    </>
   );
 };
 
@@ -133,7 +164,6 @@ const TabNavi = ({navigation}) => {
               iconName = focused ? 'person' : 'person-outline';
             }
 
-            // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
@@ -161,7 +191,7 @@ const StackNavi = () => {
       />
       <Stack.Screen
         name="detail"
-        component={DetailScreen}
+        component={DetailNavi}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
@@ -169,25 +199,50 @@ const StackNavi = () => {
 };
 
 export default function App({navigation}) {
+  const _handleStateChange = (state, value) => {
+    setData(prevState => {
+      return {
+        ...prevState,
+        [state]: value,
+      };
+    });
+  };
+
+  const [data, setData] = useState({
+    route: '',
+    product: '',
+    productInfo: {},
+    handleStateChange: _handleStateChange,
+  });
+
   return (
     <>
-      <SafeAreaView style={{backgroundColor: '#5f0e80'}} />
-      <StatusBar barStyle="light-content" />
-      <NavigationContainer>
-        <Modal.Navigator mode="modal">
-          <Modal.Screen
-            name="stackNavi"
-            component={StackNavi}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="cart"
-            component={CartScreen}
-            options={{headerShown: false}}
-          />
-        </Modal.Navigator>
-      </NavigationContainer>
-
+      <SafeAreaView
+        style={
+          data.route == 'HomeNavi'
+            ? {backgroundColor: '#5f0e80'}
+            : {backgroundColor: '#fff'}
+        }
+      />
+      <StatusBar
+        barStyle={data.route == 'HomeNavi' ? 'light-content' : 'dark-content'}
+      />
+      <DetailContext.Provider value={data}>
+        <NavigationContainer>
+          <Modal.Navigator mode="modal">
+            <Modal.Screen
+              name="stackNavi"
+              component={StackNavi}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="cart"
+              component={CartScreen}
+              options={{headerShown: false}}
+            />
+          </Modal.Navigator>
+        </NavigationContainer>
+      </DetailContext.Provider>
       <SafeAreaView></SafeAreaView>
     </>
   );

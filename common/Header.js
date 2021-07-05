@@ -1,7 +1,7 @@
-import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {DetailContext} from './Context';
 
 const MainHeader = ({navigation}) => {
   return (
@@ -37,9 +37,11 @@ const MainHeader = ({navigation}) => {
 export default MainHeader;
 
 export const DetailHeader = ({navigation, productName}) => {
+  const context = useContext(DetailContext);
   return (
     <View
       style={{
+        backgroundColor: '#fff',
         width: '100%',
         height: 50,
         flexDirection: 'row',
@@ -51,7 +53,7 @@ export const DetailHeader = ({navigation, productName}) => {
         <Ionicons name="chevron-back-outline" size={25} color="#5f0e80" />
       </TouchableOpacity>
       <View>
-        <Text style={{fontSize: 15, fontWeight: '600'}}>{productName}</Text>
+        <Text style={{fontSize: 15, fontWeight: '600'}}>{context.product}</Text>
       </View>
       <TouchableOpacity
         onPress={() => {

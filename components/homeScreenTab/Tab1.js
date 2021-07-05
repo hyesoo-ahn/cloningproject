@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   Text,
   View,
@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {currency} from '../../common/Method';
+import {DetailContext} from '../../common/Context';
 
 const DATA = [
   {
@@ -40,7 +41,9 @@ const renderItem = ({item}) => {
           alignItems: 'center',
         }}>
         <Image
-          source={{url: item.url}}
+          source={{
+            uri: item.url,
+          }}
           style={{width: '100%', height: '100%'}}
         />
       </View>
@@ -155,6 +158,7 @@ const ITEM2 = [
     price: '2800',
     category: '픽어베이글',
     title: '베이글 8종',
+    discount: 15,
   },
   {
     id: 1,
@@ -162,6 +166,7 @@ const ITEM2 = [
     price: '2500',
     category: '포비베이글',
     title: '시그니처 베이글 6종',
+    discount: 19,
   },
   {
     id: 1,
@@ -169,6 +174,7 @@ const ITEM2 = [
     price: '9000',
     category: '포비베이글',
     title: '크림치즈 8종',
+    discount: 30,
   },
   {
     id: 1,
@@ -176,6 +182,7 @@ const ITEM2 = [
     price: '2300',
     category: '오베이글',
     title: '쌀로 만든 담백한 베이글 5종',
+    discount: 13,
   },
   {
     id: 1,
@@ -183,10 +190,18 @@ const ITEM2 = [
     price: '4500',
     category: '그래밀',
     title: '통밀식사빵 2종',
+    discount: 25,
   },
 ];
 
 const ProductList = ({navigation, data, style, title}) => {
+  const context = useContext(DetailContext);
+  const handlePress = item => {
+    navigation.navigate('detail');
+    context.handleStateChange('product', `[${item.category}] ${item.title}`);
+    context.handleStateChange('productInfo', item);
+  };
+
   return (
     <View style={{...style, paddingBottom: 20}}>
       <View
@@ -198,7 +213,7 @@ const ProductList = ({navigation, data, style, title}) => {
         <Text style={{fontSize: 17, fontWeight: '500'}}>{title}</Text>
       </View>
       <ScrollView
-        style={{flexDirection: 'row', marginRight: 5}}
+        style={{flexDirection: 'row'}}
         horizontal={true}
         showsHorizontalScrollIndicator={false}>
         {data.map((item, index) => {
@@ -206,14 +221,17 @@ const ProductList = ({navigation, data, style, title}) => {
             <TouchableOpacity
               activeOpacity={0.9}
               key={index}
-              onPress={() => {
-                navigation.navigate('detail', {
-                  productName: `[${item.category}] ${item.title}`,
-                });
-              }}>
+              onPress={
+                //   () => {
+                //   navigation.navigate('detail', {
+                //     productName: `[${item.category}] ${item.title}`,
+                //   });
+                // }
+                () => handlePress(item)
+              }>
               <Image
                 source={{
-                  url: item.url,
+                  uri: item.url,
                 }}
                 style={
                   index == 0
@@ -245,7 +263,6 @@ const ProductList = ({navigation, data, style, title}) => {
                     ? {
                         marginLeft: 25,
                         flexDirection: 'row',
-                        justifyContent: 'center',
                         alignItems: 'center',
                         width: 130,
                       }
@@ -257,7 +274,7 @@ const ProductList = ({navigation, data, style, title}) => {
                       }
                 }>
                 <Text
-                  style={{fontSize: 13, fontWeight: '300', color: '#131313'}}>
+                  style={{fontSize: 14, fontWeight: '300', color: '#131313'}}>
                   [{item.category}] {item.title}
                 </Text>
               </View>
@@ -266,22 +283,56 @@ const ProductList = ({navigation, data, style, title}) => {
                   index == 0
                     ? {
                         marginLeft: 25,
-                        flexDirection: 'row',
-                        alignItems: 'center',
                         marginTop: 4,
                         marginBottom: 10,
                       }
                     : {
                         marginLeft: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
                         marginTop: 4,
                         marginBottom: 10,
                       }
                 }>
-                <Text style={{fontWeight: 'bold'}}>
-                  {currency(item.price)}원
-                </Text>
+                {!item.discount && (
+                  <Text style={{fontWeight: 'bold'}}>
+                    {currency(item.price)}원
+                  </Text>
+                )}
+                <View
+                  style={{
+                    marginTop: 3,
+                    marginBottom: 3,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
+                  <Text
+                    style={{
+                      marginRight: 3,
+                      color: '#FA622F',
+                      fontWeight: 'bold',
+                      fontSize: 13,
+                    }}>
+                    {item.discount && `${item.discount}%`}
+                  </Text>
+                  <Text style={{fontWeight: 'bold'}}>
+                    {' '}
+                    {item.discount &&
+                      `${currency(
+                        Math.floor((1 - 0.01 * item.discount) * item.price),
+                      )}원`}
+                  </Text>
+                </View>
+                {item.discount && (
+                  <Text
+                    style={{
+                      fontWeight: '300',
+                      fontSize: 12,
+                      marginTop: 1,
+                      textDecorationLine: 'line-through',
+                      color: 'gray',
+                    }}>
+                    {currency(item.price)}원
+                  </Text>
+                )}
               </View>
             </TouchableOpacity>
           );
