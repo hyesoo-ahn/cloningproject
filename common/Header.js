@@ -1,9 +1,12 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {DetailContext} from './Context';
+import {useIsFocused} from '@react-navigation/native';
 
 const MainHeader = ({navigation}) => {
+  const context = useContext(DetailContext);
+
   return (
     <View
       style={{
@@ -29,6 +32,30 @@ const MainHeader = ({navigation}) => {
           navigation.navigate('cart');
         }}>
         <Ionicons name="cart-outline" size={25} color="#fff" />
+        {context.cartItem.length !== 0 && (
+          <View
+            style={{
+              position: 'absolute',
+              backgroundColor: '#fff',
+              width: 13,
+              height: 13,
+              borderRadius: 13 / 2,
+              right: 0,
+              top: -2,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 10,
+                color: '#5f0e80',
+                fontWeight: 'bold',
+              }}>
+              {context.cartItem.length}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -38,6 +65,13 @@ export default MainHeader;
 
 export const DetailHeader = ({navigation, productName}) => {
   const context = useContext(DetailContext);
+  const [count, setCount] = useState(context.cartItem.length);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    setCount(context.cartItem.length);
+  }, [context.isModalVisible]);
+
   return (
     <View
       style={{
@@ -60,6 +94,30 @@ export const DetailHeader = ({navigation, productName}) => {
           navigation.navigate('cart');
         }}>
         <Ionicons name="cart-outline" size={25} color="black" />
+        {count !== 0 && (
+          <View
+            style={{
+              position: 'absolute',
+              backgroundColor: '#5f0e80',
+              width: 13,
+              height: 13,
+              borderRadius: 13 / 2,
+              right: 0,
+              top: -2,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 10,
+                color: '#fff',
+                fontWeight: 'bold',
+              }}>
+              {count}
+            </Text>
+          </View>
+        )}
       </TouchableOpacity>
     </View>
   );

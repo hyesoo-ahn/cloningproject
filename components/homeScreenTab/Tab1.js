@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   Text,
   View,
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {currency} from '../../common/Method';
 import {DetailContext} from '../../common/Context';
+import {useIsFocused} from '@react-navigation/native';
 
 const DATA = [
   {

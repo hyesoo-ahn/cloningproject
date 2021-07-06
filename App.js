@@ -34,8 +34,10 @@ import DetailImage from './components/detailScreen/DetailImage';
 import DetailInfo from './components/detailScreen/DetailInfo';
 import Review from './components/detailScreen/Review';
 import ProductFaq from './components/detailScreen/ProductFaq';
+import ItemLists from './screens/ItemLists';
 
 const TopTab = createMaterialTopTabNavigator();
+const CategoryTopTab = createMaterialTopTabNavigator();
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Modal = createStackNavigator();
@@ -125,10 +127,10 @@ const HomeNavi = () => {
 
 const DetailNavi = ({navigation}) => {
   const context = useContext(DetailContext);
-  const isFocused = useIsFocused();
+
   useEffect(() => {
     context.handleStateChange('route', 'DetailNavi');
-  }, [isFocused]);
+  }, []);
   return (
     <>
       <DetailHeader navigation={navigation} />
@@ -139,6 +141,17 @@ const DetailNavi = ({navigation}) => {
         <TopTab.Screen name="후기" component={Review} />
         <TopTab.Screen name="상품문의" component={ProductFaq} />
       </TopTab.Navigator>
+    </>
+  );
+};
+
+const ItemListsNavi = ({navigation}) => {
+  return (
+    <>
+      <DetailHeader navigation={navigation} />
+      <CategoryTopTab.Navigator tabBar={props => <MyTabBar {...props} />}>
+        <CategoryTopTab.Screen name="전체보기" component={ItemLists} />
+      </CategoryTopTab.Navigator>
     </>
   );
 };
@@ -194,6 +207,12 @@ const StackNavi = () => {
         component={DetailNavi}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="itemLists"
+        component={ItemListsNavi}
+        options={{headerShown: false}}
+      />
+      {/* 탭이 안보이려면 stack으로 덮어야됨 detail페이지는 탭이 안보여야하자나 ! 그래서 같은 선상에 있어야대 */}
     </Stack.Navigator>
   );
 };
@@ -212,6 +231,8 @@ export default function App({navigation}) {
     route: '',
     product: '',
     productInfo: {},
+    cartItem: [],
+    isModalVisible: false,
     handleStateChange: _handleStateChange,
   });
 
@@ -229,13 +250,13 @@ export default function App({navigation}) {
       />
       <DetailContext.Provider value={data}>
         <NavigationContainer>
-          <Modal.Navigator mode="modal">
+          <Modal.Navigator mode="modal" animationType="slide">
             <Modal.Screen
               name="stackNavi"
               component={StackNavi}
               options={{headerShown: false}}
             />
-            <Stack.Screen
+            <Modal.Screen
               name="cart"
               component={CartScreen}
               options={{headerShown: false}}
