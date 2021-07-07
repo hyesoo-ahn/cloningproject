@@ -6,5 +6,6 @@ export const DetailContext = React.createContext({
   productInfo: {},
   cartItem: [],
   isModalVisible: false,
+  detailHeaderTitle: '',
   handleStateChange: () => {},
 });

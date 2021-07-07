@@ -222,6 +222,7 @@ export default function App({navigation}) {
     productInfo: {},
     cartItem: [],
     isModalVisible: false,
+    DetailHeaderTitle: '',
     handleStateChange: _handleStateChange,
   });
 

@@ -37,7 +37,7 @@ const Tab5 = ({navigation}) => {
             activeOpacity={0.8}
             onPress={() => {
               navigation.navigate('itemLists');
-              context.handleStateChange('product', item.title);
+              context.handleStateChange('detailHeaderTitle', item.title);
             }}>
             <Image
               style={{width: '100%', height: 140, marginBottom: 15}}
