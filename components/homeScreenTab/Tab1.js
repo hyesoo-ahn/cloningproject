@@ -30,8 +30,7 @@ const DATA = [
 const pageWidth = Dimensions.get('window').width;
 
 const renderItem = ({item}) => {
-  // console.log("아이템 ===>", item);
-
+  // console.log('아이템 ===>', item);
   return (
     <>
       <View
@@ -60,55 +59,58 @@ const Tab1 = ({navigation}) => {
   };
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{flex: 1, backgroundColor: '#fff'}}>
-      <View>
-        <FlatList
-          automaticallyAdjustContentInsets={false}
-          contentContainerStyle={{
-            height: pageWidth - 35,
-          }}
-          data={DATA}
-          decelerationRate="fast"
-          horizontal
-          keyExtractor={item => item.id}
-          onScroll={onScroll}
-          pagingEnabled
-          renderItem={renderItem}
-          snapToInterval={pageWidth}
-          snapToAlignment="start"
-          showsHorizontalScrollIndicator={false}
-        />
-        <View
-          style={{
-            width: 40,
-            height: 20,
-            borderRadius: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.2)',
-            position: 'absolute',
-            bottom: 20,
-            right: 15,
-          }}>
-          <Text style={{color: '#fff', fontSize: 12, fontWeight: 'bold'}}>
-            {page + 1} / {DATA.length}
-          </Text>
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1, backgroundColor: '#fff'}}>
+        <View>
+          <FlatList
+            automaticallyAdjustContentInsets={false}
+            contentContainerStyle={{
+              height: pageWidth - 35,
+            }}
+            data={DATA}
+            decelerationRate="fast"
+            horizontal
+            keyExtractor={item => item.id}
+            onScroll={onScroll}
+            pagingEnabled
+            renderItem={renderItem}
+            snapToInterval={pageWidth}
+            snapToAlignment="start"
+            showsHorizontalScrollIndicator={false}
+          />
+
+          <View
+            style={{
+              width: 40,
+              height: 20,
+              borderRadius: 10,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              position: 'absolute',
+              bottom: 20,
+              right: 15,
+            }}>
+            <Text style={{color: '#fff', fontSize: 12, fontWeight: 'bold'}}>
+              {page + 1} / {DATA.length}
+            </Text>
+          </View>
         </View>
-      </View>
-      <ProductList
-        navigation={navigation}
-        data={ITEM1}
-        title={'이 상품 어때요?'}
-      />
-      <ProductList
-        navigation={navigation}
-        data={ITEM2}
-        title={'놓치면 후회할 가격'}
-        style={{backgroundColor: '#f7f7f7'}}
-      />
-    </ScrollView>
+        <ProductList
+          navigation={navigation}
+          data={ITEM1}
+          title={'이 상품 어때요?'}
+        />
+        <ProductList
+          navigation={navigation}
+          data={ITEM2}
+          title={'놓치면 후회할 가격'}
+          style={{backgroundColor: '#f7f7f7'}}
+        />
+      </ScrollView>
+    </>
   );
 };
 

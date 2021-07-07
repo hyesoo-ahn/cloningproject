@@ -28,7 +28,7 @@ import Tab2 from './components/homeScreenTab/Tab2.js';
 import Tab3 from './components/homeScreenTab/Tab3.js';
 import Tab4 from './components/homeScreenTab/Tab4.js';
 import Tab5 from './components/homeScreenTab/Tab5.js';
-import {DetailHeader} from './common/Header';
+import {DetailHeader, ItemListsHeader} from './common/Header';
 import {DetailContext} from './common/Context';
 import DetailImage from './components/detailScreen/DetailImage';
 import DetailInfo from './components/detailScreen/DetailInfo';
@@ -145,18 +145,7 @@ const DetailNavi = ({navigation}) => {
   );
 };
 
-const ItemListsNavi = ({navigation}) => {
-  return (
-    <>
-      <DetailHeader navigation={navigation} />
-      <CategoryTopTab.Navigator tabBar={props => <MyTabBar {...props} />}>
-        <CategoryTopTab.Screen name="전체보기" component={ItemLists} />
-      </CategoryTopTab.Navigator>
-    </>
-  );
-};
-
-const TabNavi = ({navigation}) => {
+const TabNavi = ({navigation, route}) => {
   return (
     <>
       <Header navigation={navigation} />
@@ -209,10 +198,10 @@ const StackNavi = () => {
       />
       <Stack.Screen
         name="itemLists"
-        component={ItemListsNavi}
+        component={ItemLists}
         options={{headerShown: false}}
       />
-      {/* 탭이 안보이려면 stack으로 덮어야됨 detail페이지는 탭이 안보여야하자나 ! 그래서 같은 선상에 있어야대 */}
+      {/* 탭이 안보이려면 stack으로 덮어야됨 detail페이지는 탭이 안보여야하자나! 그래서 같은 선상에 있어야대 */}
     </Stack.Navigator>
   );
 };

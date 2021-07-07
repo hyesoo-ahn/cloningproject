@@ -13,7 +13,6 @@ const MainHeader = ({navigation}) => {
         width: '100%',
         height: 50,
         backgroundColor: '#5f0e80',
-        // backgroundColor: "pink",
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
@@ -63,7 +62,7 @@ const MainHeader = ({navigation}) => {
 
 export default MainHeader;
 
-export const DetailHeader = ({navigation, productName}) => {
+export const DetailHeader = ({navigation, productName, route}) => {
   const context = useContext(DetailContext);
   const [count, setCount] = useState(context.cartItem.length);
   const isFocused = useIsFocused();
