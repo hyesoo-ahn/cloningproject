@@ -79,57 +79,59 @@ const ItemLists = ({navigation}) => {
     <>
       <ItemListsHeader navigation={navigation} />
       <View style={{backgroundColor: '#fff'}}>
-        <ScrollView
-          ref={categoryRef}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            height: 43,
-            borderBottomColor: '#d1d1d1',
-            borderBottomWidth: 1,
-            backgroundColor: '#fff',
-          }}>
-          {CATEGORY.map((item, index) => {
-            return (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  setFocused(item.title);
-                  flatListRef.current.scrollToIndex({
-                    animated: false,
-                    index: index,
-                  });
-                }}
-                style={
-                  focused == item.title
-                    ? {
-                        height: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderBottomWidth: 2,
-                        borderBottomColor: '#5f0e80',
-                        paddingHorizontal: 10,
-                      }
-                    : {
-                        height: '100%',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        // marginRight: 15,
-                        paddingHorizontal: 10,
-                      }
-                }>
-                <Text
+        {CATEGORY && (
+          <ScrollView
+            ref={categoryRef}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            style={{
+              height: 43,
+              borderBottomColor: '#d1d1d1',
+              borderBottomWidth: 1,
+              backgroundColor: '#fff',
+            }}>
+            {CATEGORY.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => {
+                    setFocused(item.title);
+                    flatListRef.current.scrollToIndex({
+                      animated: false,
+                      index: index,
+                    });
+                  }}
                   style={
                     focused == item.title
-                      ? {color: '#5f0e80', fontWeight: '600', fontSize: 15}
-                      : {color: '#828282', fontSize: 15}
+                      ? {
+                          height: '100%',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderBottomWidth: 2,
+                          borderBottomColor: '#5f0e80',
+                          paddingHorizontal: 10,
+                        }
+                      : {
+                          height: '100%',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          // marginRight: 15,
+                          paddingHorizontal: 10,
+                        }
                   }>
-                  {item.title}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+                  <Text
+                    style={
+                      focused == item.title
+                        ? {color: '#5f0e80', fontWeight: '600', fontSize: 15}
+                        : {color: '#828282', fontSize: 15}
+                    }>
+                    {item.title}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        )}
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{

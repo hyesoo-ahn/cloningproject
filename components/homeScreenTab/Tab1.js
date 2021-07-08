@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {
   Text,
   View,
@@ -7,10 +7,12 @@ import {
   FlatList,
   Image,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import {currency} from '../../common/Method';
 import {DetailContext} from '../../common/Context';
 import {useIsFocused} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const DATA = [
   {
@@ -58,9 +60,25 @@ const Tab1 = ({navigation}) => {
     setPage(newPage);
   };
 
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => {
+      setRefreshing(false);
+    });
+  }, []);
+
   return (
     <>
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         showsVerticalScrollIndicator={false}
         style={{flex: 1, backgroundColor: '#fff'}}>
         <View>
@@ -98,11 +116,13 @@ const Tab1 = ({navigation}) => {
             </Text>
           </View>
         </View>
+
         <ProductList
           navigation={navigation}
           data={ITEM1}
           title={'이 상품 어때요?'}
         />
+
         <ProductList
           navigation={navigation}
           data={ITEM2}
@@ -207,14 +227,23 @@ const ProductList = ({navigation, data, style, title}) => {
 
   return (
     <View style={{...style, paddingBottom: 20}}>
-      <View
+      <TouchableOpacity
+        onPress={() => {
+          context.handleStateChange('detailHeaderTitle', '놓치면 후회할 가격');
+          navigation.navigate('itemLists');
+        }}
         style={{
           marginTop: 25,
           marginBottom: 15,
           marginLeft: 25,
+          flexDirection: 'row',
+          alignItems: 'center',
         }}>
         <Text style={{fontSize: 17, fontWeight: '500'}}>{title}</Text>
-      </View>
+        {title !== '이 상품 어때요?' && (
+          <Ionicons name="chevron-forward-outline" size={20} color="#979797" />
+        )}
+      </TouchableOpacity>
       <ScrollView
         style={{flexDirection: 'row'}}
         horizontal={true}

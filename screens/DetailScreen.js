@@ -7,9 +7,6 @@ import {
   TouchableOpacity,
   Animated,
   Modal,
-  TouchableHighlight,
-  Pressable,
-  SafeAreaView,
 } from 'react-native';
 import {DetailContext} from '../common/Context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -44,20 +41,55 @@ const DATA = [
   },
 ];
 
+const AnimatedIcon = Animated.createAnimatedComponent(Ionicons);
+
 export default function DetailScreen({navigation, route}) {
   const context = useContext(DetailContext);
-  const [clicked, setClicked] = useState(false);
-  const isFocused = useIsFocused();
-  // const animationValue = useRef(new Animated.Value(0)).current;
-  // const scaleValue = useRef(0);
+  const scale = useRef(new Animated.Value(1)).current;
+  const opacity = useRef(new Animated.Value(1)).current;
+  const reverseOpacity = useRef(new Animated.Value(0)).current;
+  const [liked, setLiked] = useState(false);
+
+  const like = value => {
+    Animated.sequence([
+      Animated.timing(scale, {
+        toValue: 0.7,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scale, {
+        toValue: 1.2,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scale, {
+        toValue: 0.9,
+        duration: 50,
+        useNativeDriver: true,
+      }),
+      Animated.parallel([
+        Animated.timing(scale, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        // Animated.timing(value ? opacity : reverseOpacity, {
+        //   toValue: 0,
+        //   duration: 90,
+        //   useNativeDriver: true,
+        // }),
+        // Animated.timing(value ? reverseOpacity : opacity, {
+        //   toValue: 1,
+        //   duration: 90,
+        //   useNativeDriver: true,
+        // }),
+      ]),
+    ]).start();
+    setLiked(value);
+  };
 
   const handleLikePress = () => {
     setClicked(!clicked);
-    // scaleValue.current = scaleValue.current === 0 ? 0.3 : 0;
-    // Animated.timing(animationValue, {
-    //   toValue: scaleValue.current,
-    //   useNativeDriver: true,
-    // }).start();
   };
 
   const handlePurchase = () => {
@@ -157,28 +189,32 @@ export default function DetailScreen({navigation, route}) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <TouchableOpacity onPress={handleLikePress}>
-            <Animated.View
-              style={{
-                width: 24,
-                height: 24,
-                justifyContent: 'center',
-                alignItems: 'center',
-                // transform: [
-                //   {
-                //     scale: animationValue.interpolate({
-                //       inputRange: [0, 1],
-                //       outputRange: [1, 2],
-                //     }),
-                //   },
-                // ],
-              }}>
-              {clicked ? (
-                <Ionicons name="heart" size={26} color="#fa622f" />
-              ) : (
-                <Ionicons name="heart-outline" size={26} color="#5F0E80" />
-              )}
-            </Animated.View>
+          <TouchableOpacity
+            activeOpacity={1}
+            // onPress={() => like(!liked)}
+            style={{
+              width: 24,
+              height: 24,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            {liked ? (
+              <AnimatedIcon
+                onPress={() => like(!liked)}
+                name="heart"
+                size={26}
+                color="#fa622f"
+                style={{transform: [{scale}]}}
+              />
+            ) : (
+              <AnimatedIcon
+                onPress={() => like(!liked)}
+                name="heart-outline"
+                size={26}
+                color="#5F0E80"
+                style={{transform: [{scale}]}}
+              />
+            )}
           </TouchableOpacity>
         </View>
         <TouchableOpacity

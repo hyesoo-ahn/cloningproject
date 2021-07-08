@@ -1,10 +1,15 @@
 import * as React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, ScrollView} from 'react-native';
 
-export default function UserInfo() {
+export default function UserInfo({navigation}) {
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <ScrollView>
       <Text>UserInfo Screen</Text>
-    </View>
+      <Text onPress={() => navigation.navigate('coupon')}>쿠폰</Text>
+      <Text>주문 내역</Text>
+      <Text onPress={() => navigation.navigate('orderAddress')}>
+        배송지 관리
+      </Text>
+    </ScrollView>
   );
 }

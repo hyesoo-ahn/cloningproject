@@ -1,5 +1,12 @@
-import React, {useContext, useEffect} from 'react';
-import {Text, View, TouchableOpacity, Image, ScrollView} from 'react-native';
+import React, {useContext, useEffect, useState, useCallback} from 'react';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import {DetailContext} from '../../common/Context';
 
 const DATA = [
@@ -28,8 +35,23 @@ const DATA = [
 const Tab5 = ({navigation}) => {
   const context = useContext(DetailContext);
 
+  const wait = timeout => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  };
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(1000).then(() => setRefreshing(false));
+  }, []);
+
   return (
-    <ScrollView style={{backgroundColor: '#fff'}}>
+    <ScrollView
+      style={{backgroundColor: '#fff'}}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
       {DATA.map((item, index) => {
         return (
           <TouchableOpacity

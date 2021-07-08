@@ -35,6 +35,9 @@ import DetailInfo from './components/detailScreen/DetailInfo';
 import Review from './components/detailScreen/Review';
 import ProductFaq from './components/detailScreen/ProductFaq';
 import ItemLists from './screens/ItemLists';
+import Coupon from './components/userInfo/Coupon';
+import OrderAddress from './components/userInfo/OrderAddress';
+import AddAddress from './components/userInfo/AddAddress';
 
 const TopTab = createMaterialTopTabNavigator();
 const CategoryTopTab = createMaterialTopTabNavigator();
@@ -201,6 +204,17 @@ const StackNavi = () => {
         component={ItemLists}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="coupon"
+        component={Coupon}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="orderAddress"
+        component={OrderAddress}
+        options={{headerShown: false}}
+      />
+
       {/* 탭이 안보이려면 stack으로 덮어야됨 detail페이지는 탭이 안보여야하자나! 그래서 같은 선상에 있어야대 */}
     </Stack.Navigator>
   );
@@ -249,6 +263,11 @@ export default function App({navigation}) {
             <Modal.Screen
               name="cart"
               component={CartScreen}
+              options={{headerShown: false}}
+            />
+            <Modal.Screen
+              name="addAddress"
+              component={AddAddress}
               options={{headerShown: false}}
             />
           </Modal.Navigator>
