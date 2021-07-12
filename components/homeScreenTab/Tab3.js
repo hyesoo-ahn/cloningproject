@@ -31,7 +31,7 @@ const Dot = ({marginRight, delay = 0}) => {
       Animated.loop(
         Animated.timing(dotColor, {
           toValue: 1,
-          duration: 2500,
+          duration: 1500,
           useNativeDriver: false,
         }),
       ),
